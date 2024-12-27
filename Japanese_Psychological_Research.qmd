@@ -1,0 +1,281 @@
+---
+format:
+  pdf:
+    keep-tex: true
+    documentclass: ltjsbook
+    classoption: oneside
+    pdf-engine: lualatex
+    cite-method: biblatex
+    biblio-style: template/jpa
+    include-in-header: template/header_jpr.tex
+bibliography: bibliography.bib
+editor: visual
+---
+
+```{=html}
+<!-- 
+原稿の作成にあたっては，日本心理学会の手引やテンプレートを確認ください。
+https://psych.or.jp/publication/jpr/
+https://psych.or.jp/publication/temp_jpr/
+
+<<< このQmdテンプレートを使う際の注意事項 >>>
+1.以下に色々と説明が書いてあるので，それにしたがって，書き足していってください。
+　作業が進んだら，上の「Render」を押すと，Qmd→TeX→PDFの変換が自動的になされます。
+2.この<!　 >で囲われた部分は，TeXやPDFには反映されないので，削除しなくても大丈夫です。ただ，削除しても問題はないので，邪魔になったら削除してもいいです。
+-->
+```
+\thispagestyle{empty}
+
+```{=html}
+<!--
+論文のタイトルは内容を反映し、12～15語程度の長さにする必要があります。サブタイトルはメインタイトルの後にコロン（:）を付けて続けます。主要な単語の最初の文字は大文字にします（接続詞、冠詞、3文字以下の前置詞は小文字で書きます）。
+-->
+```
+# Can We write a Paper of the Japanses Psychological Research with RMarkdown?: Subtitle
+
+```{=html}
+<!--
+アブストラクト（100―175語）:アブストラクト内では，見出しを使用しての構造化は行わない。また，改行せず，続けて記載する。
+-->
+```
+## Abstract
+
+Can we write a paper of the Japanses Journal of psychology with RMarkdown? To solve this mystery we headed deep into the Amazon. At the end of our long journey we found some great documents about RMarkdown and finally said, "Yes, we can". ... Well, we'll write a abstract like this.
+
+```{=html}
+<!--
+Keywords:最大5語まで
+-->
+```
+**Keywords**:
+
+R Markdown, Reproducibility, The Japanese Journal of Psychology
+
+\clearpage
+
+```{=html}
+<!--
+このQmdファイル内で使用するRパッケージを以下に追加してください。なお，作成されるPDFには，これらの情報は出力されません。
+-->
+```
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(kableExtra)
+library(knitr)
+library(tidyverse)
+library(psych)
+library(gridExtra)
+library(jtools)
+library(ggsignif)
+```
+
+```{=html}
+<!--
+以下から本文を始める。本文冒頭の見出しは不要である。
+#で，中央大見出しになる（方法，結果，考察など）。
+##で，横大見出しになる。
+**横小見出し**で，横小見出しになる。１字下げをする。
+-->
+```
+Start writing your text from this point. Everything after "psychology" will be the main body of your paper. Let's keep writing forward!
+
+## Reproducibility of Psychology
+
+```{=html}
+<!-- 
+<<< 文献の引用について >>>
+bibliography.bibに引用文献情報を入力しておけば，参照名（ラベル）を使って，以下のように簡単に引用を指定し，自動的に本文中の引用と引用文献リストを作成します。
+-->
+```
+While the reproducibility crisis in psychology is quite serious, let's set that aside for now and explain how to cite references. First, when you write @Freud1956, it will cite the paper from the bib file. When you put citations in square brackets like this [@Hasegawa99], it creates an end-of-sentence citation style. For multiple citations at the end of a sentence, you would do it like this [@Takahashi2017; @Christie2011; @Helmholtz1925; @Morioka2018; @Mukaida2009].
+
+Next, academic papers sometimes require footnotes. In such cases, you add superscript numbers like this${}^1$. In psychology research papers, footnotes should be placed after the reference citations, so we'll write the corresponding note for this superscript number. While you wouldn't normally put two footnotes this close together, let's add another one for practice${}^2$.
+
+We examined whether RMarkdown could properly generate a PDF manuscript file that meets the submission requirements for the "Japanese Journal of Psychology."
+
+# Method
+
+## Participants
+
+```{=html}
+<!--　論文内の数値は手で打ち込まずにRから引っ張ってきましょう。
+例えば，以下では，Psychパッケージのbfiデータの数値をひっぱっています。
+まず，rで性別と年齢のデータを用意して，用意したものを`r sprintf('%.0f',nrow(bfi))`という感じで，
+挿入しています。これで，数値のコピペミスがなくなります-->
+```
+```{r include=FALSE}
+# bfiデータを読み込み
+data(bfi)
+# bfiの性別(gender)をtableで集計して，データフレーム化，その後ワイド化して，変数名を変更
+gender <- data.frame(table(bfi$gender)) %>% 
+   tidyr::spread(Var1, Freq) %>% 
+   rename(male=1,female = 2)
+```
+
+A total of `r sprintf('%.0f',nrow(bfi))` undergraduate students (`r sprintf('%.0f',gender$male)` males and `r sprintf('%.0f',gender$female)` females) from private universities in Kanagawa Prefecture participated in the study. The mean age (SD) of the participants was `r sprintf('%.2f',mean(bfi$age))` years (`r sprintf('%.2f',sd(bfi$age))`).
+
+```{=html}
+<!--　もし，研究脱落者や調査において欠測値がある場合は，何名がデータから脱落し，
+結果として何名を分析対象にしたか述べてください  -->
+```
+## Measurement
+
+<!-- ↑この見出しは，内容に合わせて変更ください-->
+
+<!-- ↓横小見出しは前後にスペースをいれる-->
+
+**Psychology Reproducibility Assessment Scale** In psychology research papers, there are times when you want to use bold text rather than a heading. As shown with "Psychology Reproducibility Assessment Scale" on the left, you can achieve this by enclosing the text with double asterisks.
+
+When writing papers, we often need to indicate where figures should be inserted by making notes in the margin. For example, when you want to insert Figure 1 around here, you can use LaTeX's marginpar package and fbox like this: \marginpar{\fbox{Figure 1}} to create a box-enclosed "Figure 1" in the margin.
+
+## Procedure
+
+...
+
+## Analysis
+
+...
+
+```{=html}
+<!-- 
+統計解析については必要に応じて記載ください（心理学研究では書いてない論文も多いですが，それは好ましくないように思います）。Rパッケージなどのオープンソースソフトウェアは無料ですが，だからこそ，その公開した方の科学への貢献に感謝し，適切に引用しましょう。
+-->
+```
+## Ethics
+
+...
+
+```{=html}
+<!-- 倫理委員会の承認など，倫理審査に関する記述は，投稿時には具体的な所属機関は伏せる。
+マーキングの塗りつぶしは行わない。-->
+```
+# Results
+
+In papers, we often need to indicate where tables should be inserted by making notes in the margin. For example, when you want to insert Table 1 around here, you can use LaTeX's marginpar package and fbox like this: \marginpar{\fbox{Table1}} to create a box-enclosed "Table 1" in the margin.
+
+## Relationship Between Extraversion and Neuroticism
+
+```{r include=FALSE}
+# bfiの外向性と神経症傾向の相関を出します
+summary_bfi_fig <- bfi %>% 
+   mutate(Agreeableness = A1 + A2 + A3 + A4 + A5,
+          Conscientiousness = C1 + C2 + C3 + C4 + C5,
+          Extraversion = E1 + E2 + E3 + E4 + E5,
+          Neuroticism = N1 + N2 + N3 + N4 + N5,
+          Openness = O1 + O2 + O3 + O4 + O5)
+
+cor_result <- cor.test(summary_bfi_fig$Extraversion,summary_bfi_fig$Neuroticism)
+```
+
+　For practice, let's calculate extraversion and neuroticism using the bfi dataset from the psych package. The Pearson product-moment correlation coefficient between extraversion and neuroticism was `r sprintf('%.3f',cor_result$estimate)` (t(`r sprintf('%.0f',cor_result$parameter)`) = `r sprintf('%.3f',cor_result$statistic)`, p = `r sprintf('%.3f',cor_result$p.value)`), with a 95% confidence interval ranging from `r sprintf('%.3f',cor_result$conf.int[1])` to `r sprintf('%.3f',cor_result$conf.int[2])`). The scatter plot is shown in Figure 2\marginpar{\fbox{Figure 2}}.
+
+# Discussion
+
+In this study, we examined whether RMarkdown could be used to write papers for the "Japanese Journal of Psychology." We have prepared a template for this purpose, so researchers can now create quite satisfactory manuscripts simply by writing their analyses and content. However, the reference citation system is not yet perfect, and we look forward to working with volunteers who are willing to help refine this template.
+
+# Conflict of Interest
+
+...
+
+```{=html}
+<!-- 
+利益相反に関する記述を本文末尾に記載する。
+著者情報を含む場合は，投稿時には具体的な機関名等を伏せるよう注意する
+-->
+```
+# Acknowledgments
+
+...
+
+# Funding
+
+...
+
+\clearpage
+
+# References
+
+::: {#refs}
+:::
+
+\clearpage
+
+# Footnote(s)
+
+<!-- 必要に応じて脚注を追加ください。不要ならclearpageから削除ください-->
+
+${}^1$This is an example of a footnote. Please add any supplementary information about the paper here.
+
+<!-- 著者情報を含む脚注は，以下のように記載するか，記載しないこと-->
+
+${}^2$(Deleted due to author information)
+
+\clearpage
+
+<!-- Table，Figureは1ページに1つずつ配置すること。-->
+
+```{r echo=FALSE}
+# bfiの各Big Five因子を合計して，describe関数で記述統計を計算する。不要なものは除外。
+summary_bfi <- bfi %>% 
+   mutate(Agreeableness = A1 + A2 + A3 + A4 + A5,
+          Conscientiousness = C1 + C2 + C3 + C4 + C5,
+          Extraversion = E1 + E2 + E3 + E4 + E5,
+          Neuroticism = N1 + N2 + N3 + N4 + N5,
+          Openness = O1 + O2 + O3 + O4 + O5) %>% 
+   select(Extraversion,Neuroticism,Conscientiousness,Agreeableness,Openness) %>% 
+   describe() %>% 
+   as_tibble() %>%
+   select(-vars, -trimmed, -mad, -range, -se)
+
+# kableを使って表を作る（以下のようにやると結構きれいになります）
+kable(summary_bfi, 
+      format = "latex", 
+      booktabs = T, 
+      caption = "Descriptive Statistics of bfi",
+      digits = 2,
+      col.names = c("n","Mean","SD","Median","Min","Max","Skewness","kurtosis")) %>%
+  kable_styling(latex_options = c("striped", "hold_position"),full_width = F)
+```
+
+```{=tex}
+\begin{center}
+Note. SD=standard deviation
+\end{center}
+```
+\clearpage
+
+![How R Markdown works](figures/fig1.png)
+
+\clearpage
+
+```{=html}
+<!-- Rのggplotで論文の図を作った場合　
+Rチャンクの指定において，\\label{fig:figs}以降に図のタイトルを書きます。
+-->
+```
+```{r figs, echo=FALSE, message=FALSE, warning=FALSE, fig.width=7,fig.height=4,fig.cap="\\label{fig:figs}Examples of bar plot and scatter plot "}
+# 相関係数の算出で使ったと同じデータを使う(genderは因子型にする)
+summary_bfi_fig2 <- summary_bfi_fig %>%
+   mutate(gender = ifelse(gender=="1", "Male","Female"))
+
+p1 <- summary_bfi_fig2 %>%
+   filter(!is.na(Neuroticism)) %>%
+   ggplot(aes(x = gender, y = Neuroticism)) +
+   stat_summary(aes(fill=gender),fun=mean,geom="bar",alpha=0.8, colour="black", position="dodge", show.legend = F) +
+   stat_summary(aes(group=gender),fun.data=mean_sdl,geom="errorbar",size=0.5,width=0.2,position=position_dodge(.9)) +
+   scale_fill_manual(values=c("gray10","white")) +
+   theme(panel.background = element_blank()) +
+   xlab("Gender") +
+   theme_apa() +
+   geom_signif(stat = "identity",data = data.frame(x = c(1),xend = c(2),y = c(30),annotation = c("***")),
+              aes(x = x, xend = xend, y = y, yend = y, annotation = annotation)) +
+   scale_y_continuous(expand = c(0,0),limits = c(0,33))
+
+p2 <- summary_bfi_fig2 %>%
+   filter(!is.na(Neuroticism)) %>%
+   filter(!is.na(Extraversion)) %>%
+   ggplot(aes(x = Extraversion, y = Neuroticism)) +
+   geom_point() +
+   theme_apa()
+
+gridExtra::grid.arrange(p1, p2, nrow = 1)
+```
