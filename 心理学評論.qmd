@@ -1,13 +1,7 @@
 ---
 format:
-  pdf:
-    keep-tex: true
-    documentclass: ltjsbook
-    classoption: oneside
-    pdf-engine: lualatex
-    cite-method: biblatex
-    biblio-style: template/jpa
-    include-in-header: template/header_sjpr.tex
+  sjpr-pdf: default
+  sjpr-docx: default
 bibliography: bibliography.bib
 editor: visual
 ---

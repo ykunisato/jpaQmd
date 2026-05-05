@@ -1,0 +1,21 @@
+title: 心理学評論 (SJPR) Quarto Format
+author: Yoshihiko Kunisato
+version: 0.1.0
+quarto-required: ">=1.4.0"
+contributes:
+  formats:
+    pdf:
+      documentclass: ltjsbook
+      classoption: [oneside]
+      pdf-engine: lualatex
+      cite-method: biblatex
+      biblio-style: jpa
+      include-in-header:
+        - header.tex
+      keep-tex: true
+      format-resources:
+        - jpa.bbx
+        - jpa.cbx
+        - jpa.dbx
+    docx:
+      reference-doc: sjpr_template.docx

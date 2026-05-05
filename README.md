@@ -3,12 +3,21 @@
 <img src="style-guide/jpaQmd.png" align="right" alt="jpaQmd" width="180" />
 
 
-jpaQmdは，日本心理学会の『心理学研究』と『Japanese Psychological Research』への投稿用PDF原稿を作成するためのQuartoテンプレートです。[日本心理学会の「執筆・投稿の手びき(2022年版)」](https://psych.or.jp/manual/)に基づいています。おまけで，『心理学評論』のテンプレートも用意しています。どれも完成版ではく，おそらくある不具合を修正する必要があるかもしれません。不具合があれば，Issuesか国里愛彦(専修大学)に報告ください（メールフォーム，メール，Xなどどこからでも構いません）。本Quartoテンプレートの引用文献処理には，[biblatex-jpa](https://github.com/sbtseiji/biblatex-jpa)を使っています([詳細はこちら](template/README.md))。
+jpaQmdは，日本心理学会の『心理学研究』と『Japanese Psychological Research』への投稿用PDF原稿を作成するためのQuarto拡張機能です。[日本心理学会の「執筆・投稿の手びき(2022年版)」](https://psych.or.jp/manual/)に基づいています。おまけで，『心理学評論』のテンプレートも用意しています。どれも完成版ではなく，おそらくある不具合を修正する必要があるかもしれません。不具合があれば，Issuesか国里愛彦(専修大学)に報告ください（メールフォーム，メール，Xなどどこからでも構いません）。本Quarto拡張機能の引用文献処理には，[biblatex-jpa](https://github.com/sbtseiji/biblatex-jpa)を使っています。
 
+本リポジトリには，以下の3つのカスタムフォーマットが含まれています。
 
-## 既存のプロジェクに作成する場合のインストール法
+| 投稿先 | フォーマット名 | デモqmdファイル |
+|---|---|---|
+| 心理学研究 | `jjpsy-pdf` / `jjpsy-docx` | `心理学研究.qmd` |
+| Japanese Psychological Research | `jpr-pdf` / `jpr-docx` | `Japanese_Psychological_Research.qmd` |
+| 心理学評論 | `sjpr-pdf` / `sjpr-docx` | `心理学評論.qmd` |
 
-既存のプロジェクに作成する場合は，Terminalなどで以下のようにインストールします。
+## インストール法
+
+### 新規プロジェクトを作成する場合
+
+新規にプロジェクトを作る場合は，Terminalなどで以下のように`quarto use template`を実行します。デモqmd・bibliography.bib・拡張機能一式がダウンロードされます。
 
 ```bash
 quarto use template ykunisato/jpaQmd
@@ -16,42 +25,75 @@ quarto use template ykunisato/jpaQmd
 
 上記のコマンドを行うと以下の質問がなされます。最初の質問はYesと回答します。２つ目の質問はディレクトリを作ってその中にテンプレートをいれるかどうかを聞いています。既にテンプレートをいれるディレクトリがあり，そこに移動している場合はNoと回答します。Noと回答したらそのままテンプレートがダウンロードされて，３つ目の質問はないです。ディレクトリを新規に作る場合は２つ目の質問でYesとします。すると，３つ目の質問でディレクトリ名を聞かれますので，作りたいディレクトリ名を記入ください。
 
+```
 Quarto templates may execute code when documents are rendered. If you do not trust the authors of the template, we recommend that you do not install or use the template.
 
-- ? Do you trust the authors of this template (Y/n) ›
-- ? Create a subdirectory for template? (Y/n) ›
-- ? Directory name: ›
+? Do you trust the authors of this template (Y/n) ›
+? Create a subdirectory for template? (Y/n) ›
+? Directory name: ›
+```
 
-なお，quarto use templateを使うと，jpaQmd.Rprojが作られます。
+### 既存のプロジェクトに拡張機能だけを追加する場合
+
+既存のQuartoプロジェクトに拡張機能だけを追加したい場合は，以下のコマンドを実行ください。`_extensions/jjpsy/`，`_extensions/jpr/`，`_extensions/sjpr/`がプロジェクトに追加されます。
+
+```bash
+quarto add ykunisato/jpaQmd
+```
 
 ## 使用法
 
-jpaQmdテンプレートをダウンロードすると，以下の３つのファイルがあります。投稿先に応じて，使い分けてください。
+### PDFを出力する
 
-- 心理学研究.qmd (『心理学研究』投稿用）
-- Japanese_Psychological_Research.qmd (『Japanese Psychological Research』投稿用）
-- 心理学評論.qmd (『心理学評論』投稿用）
+ダウンロード後，使用するqmdファイルを開いて，RStudio等でRenderをクリックすると各誌のフォーマットでPDFが出力されます。コマンドラインから出力する場合は次のようにします。
 
-用いるQuarto(qmd)ファイルを開いて，Renderをクリックください。各雑誌のフォーマットでPDFが出力されます。
-
-## その他
-
-PDFで十分なのですが，どうしてもWordがほしい場合もあるかもしれません。その場合は，以下のコマンドを実施して，Word形式で出力できます(調整が必要です)。
-
-**心理学研究の場合**
-
-```
-pandoc 心理学研究.tex -o 心理学研究.docx --reference-doc=template/JJPsy_template.docx -V lang=ja-JP --pdf-engine=lualatex
+```bash
+quarto render 心理学研究.qmd --to jjpsy-pdf
+quarto render Japanese_Psychological_Research.qmd --to jpr-pdf
+quarto render 心理学評論.qmd --to sjpr-pdf
 ```
 
-**Japanese Psychological Researchの場合**
+### Wordを出力する
 
-```
-pandoc Japanese_Psychological_Research.tex -o Japanese_Psychological_Research.docx --reference-doc=template/JPR_template.docx --pdf-engine=lualatex
+各qmdファイルのYAMLには `<format>-docx: default` を最初から含めています。Renderすると，PDFと併せてWord文書も出力されます。Wordだけを出力したい場合は次のようにします。
+
+```bash
+quarto render 心理学研究.qmd --to jjpsy-docx
+quarto render Japanese_Psychological_Research.qmd --to jpr-docx
+quarto render 心理学評論.qmd --to sjpr-docx
 ```
 
-**心理学評論の場合**
+Wordのみで十分な場合は，qmdのYAMLから `<format>-pdf: default` の行を削除しても構いません。
 
+### YAMLヘッダの例
+
+各qmdファイルのYAMLヘッダは以下のようにシンプルになっています。
+
+```yaml
+---
+format:
+  jjpsy-pdf: default
+  jjpsy-docx: default
+bibliography: bibliography.bib
+editor: visual
+---
 ```
-pandoc 心理学評論.tex -o 心理学評論.docx --reference-doc=template/sjpr_template.docx -V lang=ja-JP --pdf-engine=lualatex
+
+オプションを上書きしたい場合は次のように書きます。
+
+```yaml
+---
+format:
+  jjpsy-pdf:
+    keep-tex: false
+bibliography: bibliography.bib
+---
 ```
+
+## 引用文献スタイルについて
+
+本拡張機能は[biblatex-jpa（日本心理学会風文献スタイル，2022年版）](https://github.com/sbtseiji/biblatex-jpa)の `jpa.bbx` / `jpa.cbx` / `jpa.dbx` を同梱しています。これらのファイルは2024/12/26時点で配布元からダウンロードしたもので，変更は加えていません。
+
+## ライセンス
+
+本リポジトリのライセンスは[LICENSE](LICENSE)を参照ください。同梱しているbiblatex-jpaのライセンスは[配布元](https://github.com/sbtseiji/biblatex-jpa)を参照ください。
