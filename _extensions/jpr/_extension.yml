@@ -12,7 +12,6 @@ contributes:
       biblio-style: jpa
       include-in-header:
         - header.tex
-      keep-tex: true
       format-resources:
         - jpa.bbx
         - jpa.cbx
