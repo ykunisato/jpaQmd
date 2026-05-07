@@ -92,7 +92,7 @@ bibliography: bibliography.bib
 
 ## 引用文献スタイルについて
 
-本拡張機能は[biblatex-jpa（日本心理学会風文献スタイル，2022年版）](https://github.com/sbtseiji/biblatex-jpa)の `jpa.bbx` / `jpa.cbx` / `jpa.dbx` を同梱しています。これらのファイルは2024/12/26時点で配布元からダウンロードしたもので，変更は加えていません。
+本拡張機能は[biblatex-jpa（日本心理学会風文献スタイル，2022年版）](https://github.com/sbtseiji/biblatex-jpa)の `jpa.bbx` / `jpa.cbx` / `jpa.dbx` を同梱しています。これらのファイルは2026/5/7時点で配布元からダウンロードしたもので，変更は加えていません。
 
 ## ライセンス
 
